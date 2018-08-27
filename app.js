@@ -6,20 +6,14 @@ const hbs = require('hbs');
 
 const fs = require('fs');
 
+const{pushUsersArray} = require('./utils/users');
+
 app.use(express.static(path.join(__dirname, '/public')));
 app.set('view engine','hbs');
 hbs.registerPartials(__dirname+'/views/partials');
 
 
-var getUsersArray = () => {
-	try{
-		var userStr = fs.readFileSync('data.json');
-		return JSON.parse(userStr);
-	}
-	catch(e){
-		return [];
-	}
-};
+
 
 /*var isEmpty = (obj)  => {
     for(var key in obj) {
@@ -28,25 +22,6 @@ var getUsersArray = () => {
     }
     return true;
 }*/
-
-var pushUsersArray = (user) => {
-	
-	
-	if(typeof user.name !== "undefined"){
-		var users = getUsersArray();
-		users.push(user);
-		fs.writeFile('data.json', JSON.stringify(users,null,3),(err) =>  {
-				if(err){
-					console.log(err);
-				}
-			});
-		}
-
-};
-
-
-
-
 
 
 /*app.use('/', (req,res,next) => {
@@ -67,8 +42,6 @@ app.get('/', (req,res) => {
 		rollNO
 	}
 	pushUsersArray(user);
-	
-	/*console.log(user);*/
 	
 	res.render('index.hbs');
 });
